@@ -1,0 +1,48 @@
+campaign:
+  model: gpt-5.6-sol
+  reasoning_effort: medium
+  effect_size_threshold: 0.15
+  max_retry: 3
+  retrospective_min_per_group: 5
+  prospective_min_per_group: 5
+  min_anchor_stratum: 3
+  significance_alpha: 0.1
+
+admission:
+  min_heavy_atoms: 3
+  max_heavy_atoms: 50
+  max_mol_weight: null
+  allowed_atom_symbols: ["C", "N", "O", "S", "P", "F", "Cl", "Br", "I"]
+
+construction:
+  A: Cs
+  B: Pb
+  X: Br
+  lattice_constant: 5.95
+  supercell: [2, 2, 3]
+  vacuum: 20.0
+  overlap_cutoff: 1.6
+  n_ligand_conformers: 200
+  n_ligand_relax: 32
+  binding_sites:
+    anionic: [16]
+
+relaxer:
+  device: cuda
+  checkpoint: mattersim-v1.0.0-5m
+  d3:
+    a1: 0.4289
+    a2: 4.4407
+    s8: 0.7875
+    cutoff: 20.0
+  optimizer:
+    fmax: 0.025
+    max_steps: 1000
+
+binding:
+  n_placements: 5
+  min_placements_ok: 3
+  max_placement_std: 1.0
+  use_reference_cache: True
+  e_vacancy_cached: -225.9296
+  max_binding_energy: -6.0

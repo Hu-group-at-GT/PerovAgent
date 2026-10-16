@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "perovagent"
+version = "0.1.0"
+description = "Autonomous multi-agentic framework for discovering ligand design principles for halide perovskite surfaces."
+requires-python = ">=3.12"
+license = "MIT AND Apache-2.0"
+license-files = ["LICENSE"]
+dependencies = [
+    "ase",
+    "numpy",
+    "perovkit @ git+https://github.com/Hu-group-at-GT/PerovKit.git@a308871c1603a915d794dcc94ec7fc0b75740d4a",
+    "pydantic",
+    "pydantic-ai",
+    "pyyaml",
+    "rdkit",
+    "scipy",
+    "mattersim",
+    "nvalchemi-toolkit-ops==0.3.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["perovagent*"]
