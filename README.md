@@ -1,12 +1,16 @@
 # PerovAgent for Autonomous Discovery of Ligand Design Principles for Halide Perovskite Surfaces
 
+![Schematic](docs/images/schematics.png)
+
 This repository contains the source codes for our work below:
 
 Cha, S; Jeong, YJ; Conde del Moral, A; Correa-Baena, J-P; Marder, S; Ginger, D*; Fung, V*; Hu, G*. **Autonomous Discovery of Ligand Design Principles for Halide Perovskite Surfaces.**
 
-If you have any questions regarding this repostiory, create an issue or contact scha@gatech.edu.
+If you have any questions regarding this repository, create an issue or contact scha@gatech.edu.
 
 ## Installation
+
+A CUDA GPU is required (`relaxer.device: cuda` in the configs).
 
 ```bash
 # create virtual environment
@@ -26,11 +30,11 @@ python -m perovagent.evaluation.dftd3
 
 ### 1. Configure the `config.yml`
 
-The config files used in our work can be found in `./config`. Modify as needed.
+The config files used in our work can be found in `./config`. Modify as needed. The LLM is set by `campaign.model` and `campaign.reasoning_effort`.
 
 ### 2. Locate the API key
 
-`PerovAgent` currently only supports `OPENAI_API_KEY`; supports for other LLM models are in progress. To use the key, create an `.env` file in any directory with the following format:
+`PerovAgent` currently only supports `OPENAI_API_KEY`; support for other LLM providers is in progress. To use the key, create an `.env` file in any directory with the following format:
 
 ```bash
 # .env 
@@ -47,22 +51,28 @@ set -a; source .env; set +a
 The campaign budget and parallelization setting must be set by CLI arguments. Note that each campaign can only use a single GPU, so set `gpu` id only when you are running multiple campaigns in parallel on a multi-GPU machine. 
 
 ```bash
-python run_discovery_campaign.py --config "CONFIG_DIR" \     # config directory
-                                 --output_dir "OUTPUT_DIR" \ # output directory
-                                 --n_workers 4 \             # parallel MLIP workers
-                                 --gpu 0 \                   # GPU id
-                                 --random_seed 42 \          # random seed 
-                                 --evals_cap 200 \           # budget by # of molecules 
-                                 --iters_cap 150 \           # budget by # of ReAct steps
-                                 --patience 0                # early stopping
+python run_discovery_campaign.py --config config/config.yml \
+                                 --output_dir OUTPUT_DIR \
+                                 --n_workers 4 \
+                                 --gpu 0 \
+                                 --random_seed 42 \
+                                 --evals_cap 200 \
+                                 --iters_cap 150 \
+                                 --patience 0
 ```
+
+- `--n_workers`: parallel MLIP workers
+- `--gpu`: GPU id
+- `--evals_cap`, `--iters_cap`: budget by # of molecules, # of ReAct steps
+- `--patience`: early stopping (0 disables it)
+
 
 ## Campaign outputs
 
 
 | File | Contents |
 |---|---|
-| `config.json` | the config plus the resolved CLI argument the run used |
+| `config.json` | the config plus the resolved CLI arguments the run used |
 | `summary.json` | best-binding ligand, principle counts, stop reason |
 | `decision_log.jsonl`, `convergence.jsonl` | one row per ReAct step: the decision, its result, pool statistics |
 | `candidates.jsonl` | every evaluated ligand: SMILES, anchor, binding energy ± placement spread, contact map, hypothesis |
@@ -83,11 +93,11 @@ To improve clarity and readability, some terminologies in the paper have been ch
 | Paper | Code, and what the agents see |
 |---|---|
 | *Formulate* | prompts say `DERIVE_PRINCIPLE`; `retrospective` in variable names |
-| *Test* | prompts say `EXPLAIN`; `prospective` in variable names |
+| *Test* | prompts say `EXPERIMENT` with `goal="explain"`; `prospective` in variable names |
 | satisfying / violating group | prompts say "arm"; principle fields `n_match` / `n_other` |
 | matched molecular pair | prompts and verdict details say "twin" |
 | independent unit (after Butina clustering) | verdict details say "series"; principle fields `n_match_eff` / `n_other_eff` |
-| playbook | prompts say lessons; `EditLesson`|
+| playbook | Summarizer prompt says lessons; `EditLesson`|
 | confound audit: partition balance, anchor confounding, separability, size confounding | principle fields `degenerate_partition`, `within_anchor_effect`, `anchor_perfectly_collinear`, `within_size_effect`.|
 
 ## License
