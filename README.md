@@ -90,7 +90,7 @@ python run_discovery_campaign.py --config config/config.yml \
 
 To improve clarity and readability, some terminologies in the paper have been changed from those used in the code. We did not reflect these changes *post hoc* because this changes the raw text that agents see, which could potentially affect their search behaviors and hence the reproducibility of this work. This repository exactly maintains the old prompts and schemas of the campaigns reported in the paper. 
 
-| Paper | Code, and what the agents see |
+| Paper terminology | Original code and prompt text |
 |---|---|
 | *Formulate* | prompts say `DERIVE_PRINCIPLE`; `retrospective` in variable names |
 | *Test* | prompts say `EXPERIMENT` with `goal="explain"`; `prospective` in variable names |
