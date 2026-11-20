@@ -1,6 +1,6 @@
 # PerovAgent for Autonomous Discovery of Ligand Design Principles for Halide Perovskite Surfaces
 
-![Schematic](docs/images/schematics.png)
+![Schematic](docs/images/schematic.png)
 
 This repository contains the source codes for our work below:
 
